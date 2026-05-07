@@ -1,0 +1,226 @@
+html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 AI/SW 진로 분석 포트폴리오</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Noto+Sans+KR:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0b10;
+            --card-bg: #161b22;
+            --primary-navy: #10162f;
+            --accent-green: #39ff14;
+            --accent-blue: #00d4ff;
+            --text-main: #e6edf3;
+            --text-dim: #8b949e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes glowPulse {
+            0% { box-shadow: 0 0 5px rgba(57, 255, 20, 0.2); }
+            50% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.4); }
+            100% { box-shadow: 0 0 5px rgba(57, 255, 20, 0.2); }
+        }
+
+        .reveal { opacity: 0; transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); animation: fadeInUp 0.8s ease-out forwards; }
+
+        /* Navigation */
+        nav {
+            position: fixed; top: 0; width: 100%;
+            background: rgba(10, 11, 16, 0.8);
+            backdrop-filter: blur(15px); z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        nav .container {
+            max-width: 1100px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2rem;
+        }
+        .logo { font-weight: 700; color: var(--accent-green); text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); }
+        nav ul { display: flex; list-style: none; }
+        nav ul li { margin-left: 2rem; }
+        nav ul li a { text-decoration: none; color: var(--text-main); font-weight: 500; transition: 0.3s; }
+        nav ul li a:hover { color: var(--accent-blue); }
+
+        /* Hero Section */
+        header {
+            height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; background: radial-gradient(circle at center, #1a1f35 0%, var(--bg-color) 70%);
+        }
+        header h1 {
+            font-size: clamp(2rem, 8vw, 4rem); margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--accent-green), var(--accent-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            opacity: 0; animation: fadeInUp 1s ease-out 0.2s forwards;
+        }
+        header p { color: var(--text-dim); opacity: 0; animation: fadeInUp 1s ease-out 0.5s forwards; }
+
+        /* Sections */
+        section { padding: 120px 2rem; max-width: 1100px; margin: 0 auto; }
+        h2 { font-size: 2.2rem; margin-bottom: 4rem; text-align: center; color: var(--accent-blue); position: relative; }
+        h2::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 50px; height: 3px; background: var(--accent-green); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; }
+        
+        .card {
+            background: var(--card-bg); padding: 2.5rem; border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-15px); border-color: var(--accent-green);
+            box-shadow: 0 10px 30px rgba(57, 255, 20, 0.15);
+        }
+        .card h3 { color: var(--accent-blue); margin-bottom: 1.2rem; }
+
+        /* Timeline Improvement */
+        .timeline { position: relative; padding: 40px 0; }
+        .timeline::after { content: ''; position: absolute; width: 2px; background: linear-gradient(to bottom, transparent, var(--accent-blue), transparent); top: 0; bottom: 0; left: 50%; margin-left: -1px; }
+        
+        .t-container { padding: 20px 40px; position: relative; width: 50%; opacity: 0; transition: 1s; }
+        .t-container.active { opacity: 1; transform: translateX(0); }
+        .left { left: 0; text-align: right; transform: translateX(-50px); }
+        .right { left: 50%; transform: translateX(50px); }
+        .t-container::after {
+            content: ''; position: absolute; width: 16px; height: 16px; right: -8px;
+            background: var(--accent-green); top: 30px; border-radius: 50%; z-index: 1;
+            box-shadow: 0 0 15px var(--accent-green);
+        }
+        .right::after { left: -8px; }
+        .content { background: var(--card-bg); padding: 25px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .year-title { color: var(--accent-green); font-weight: bold; font-size: 1.2rem; }
+
+        @media screen and (max-width: 768px) {
+            .timeline::after { left: 31px; }
+            .t-container { width: 100%; padding-left: 70px; text-align: left; transform: translateX(30px); }
+            .t-container::after { left: 23px; }
+            .left, .right { transform: translateX(30px); }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container">
+            <div class="logo">2026 AI PORTFOLIO</div>
+            <ul>
+                <li><a href="#jobs">직무</a></li>
+                <li><a href="#skills">역량</a></li>
+                <li><a href="#roadmap">로드맵</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>AI & Embedded Engineer</h1>
+        <p>물리적 환경을 이해하고 AI 알고리즘을 최적화하는 전문가</p>
+    </header>
+
+    <section id="jobs" class="reveal">
+        <h2>Future Career</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>AI 에이전트 관리자</h3>
+                <p>에이전틱 AI 군단을 온보딩하고 성능과 비용을 관리하는 전문가입니다.</p>
+            </div>
+            <div class="card">
+                <h3>AI 협업 디자이너</h3>
+                <p>업무 방식을 AI 네이티브하게 재설계하고 상호작용을 디자인합니다.</p>
+            </div>
+            <div class="card">
+                <h3>엣지 AI 엔지니어</h3>
+                <p>실시간 AI 구동을 위한 아키텍처를 최적화하는 핵심 직무입니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="reveal">
+        <h2>Core Competencies</h2>
+        <div class="grid">
+            <div class="card" style="border-left: 4px solid var(--accent-green);">
+                <h3>HW-SW 융합 최적화</h3>
+                <p>제한된 자원에서 지연 시간과 전력을 최적화하는 역량</p>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--accent-blue);">
+                <h3>에이전트 오케스트레이션</h3>
+                <p>AI 워크플로우를 재구성하는 매니지먼트 능력</p>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--accent-green);">
+                <h3>고신뢰성 시스템 설계</h3>
+                <p>보안 및 안정성이 검증된 시스템 구축 역량</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap" class="reveal">
+        <h2>4-Year Roadmap</h2>
+        <div class="timeline">
+            <div class="t-container left reveal-step">
+                <div class="content">
+                    <div class="year-title">1학년: Foundation</div>
+                    <p>C/C++, 리눅스 기초, 선형대수학 습득.</p>
+                </div>
+            </div>
+            <div class="t-container right reveal-step">
+                <div class="content">
+                    <div class="year-title">2학년: Core Systems</div>
+                    <p>컴퓨터 구조, OS 커널 학습 및 프로젝트.</p>
+                </div>
+            </div>
+            <div class="t-container left reveal-step">
+                <div class="content">
+                    <div class="year-title">3학년: AI Optimization</div>
+                    <p>CUDA 프로그래밍 및 모델 경량화 연구.</p>
+                </div>
+            </div>
+            <div class="t-container right reveal-step">
+                <div class="content">
+                    <div class="year-title">4학년: Specialization</div>
+                    <p>캡스톤 디자인 및 도메인 특화 전문가 과정.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Intersection Observer for Reveal Animations
+        const observerOptions = { threshold: 0.2 };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal, .t-container').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
